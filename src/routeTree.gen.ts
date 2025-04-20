@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthSignupImport } from './routes/auth/signup'
+import { Route as AuthPasswordForgotImport } from './routes/auth/passwordForgot'
 import { Route as AuthLoginImport } from './routes/auth/login'
 
 // Create/Update Routes
@@ -26,6 +27,12 @@ const IndexRoute = IndexImport.update({
 const AuthSignupRoute = AuthSignupImport.update({
   id: '/auth/signup',
   path: '/auth/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthPasswordForgotRoute = AuthPasswordForgotImport.update({
+  id: '/auth/passwordForgot',
+  path: '/auth/passwordForgot',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,6 +60,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
+    '/auth/passwordForgot': {
+      id: '/auth/passwordForgot'
+      path: '/auth/passwordForgot'
+      fullPath: '/auth/passwordForgot'
+      preLoaderRoute: typeof AuthPasswordForgotImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/signup': {
       id: '/auth/signup'
       path: '/auth/signup'
@@ -68,12 +82,14 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth/login': typeof AuthLoginRoute
+  '/auth/passwordForgot': typeof AuthPasswordForgotRoute
   '/auth/signup': typeof AuthSignupRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth/login': typeof AuthLoginRoute
+  '/auth/passwordForgot': typeof AuthPasswordForgotRoute
   '/auth/signup': typeof AuthSignupRoute
 }
 
@@ -81,27 +97,30 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auth/login': typeof AuthLoginRoute
+  '/auth/passwordForgot': typeof AuthPasswordForgotRoute
   '/auth/signup': typeof AuthSignupRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth/login' | '/auth/signup'
+  fullPaths: '/' | '/auth/login' | '/auth/passwordForgot' | '/auth/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/login' | '/auth/signup'
-  id: '__root__' | '/' | '/auth/login' | '/auth/signup'
+  to: '/' | '/auth/login' | '/auth/passwordForgot' | '/auth/signup'
+  id: '__root__' | '/' | '/auth/login' | '/auth/passwordForgot' | '/auth/signup'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthLoginRoute: typeof AuthLoginRoute
+  AuthPasswordForgotRoute: typeof AuthPasswordForgotRoute
   AuthSignupRoute: typeof AuthSignupRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthLoginRoute: AuthLoginRoute,
+  AuthPasswordForgotRoute: AuthPasswordForgotRoute,
   AuthSignupRoute: AuthSignupRoute,
 }
 
@@ -117,6 +136,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/auth/login",
+        "/auth/passwordForgot",
         "/auth/signup"
       ]
     },
@@ -125,6 +145,9 @@ export const routeTree = rootRoute
     },
     "/auth/login": {
       "filePath": "auth/login.tsx"
+    },
+    "/auth/passwordForgot": {
+      "filePath": "auth/passwordForgot.tsx"
     },
     "/auth/signup": {
       "filePath": "auth/signup.tsx"
