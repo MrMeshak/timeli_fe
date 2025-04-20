@@ -59,7 +59,6 @@ export default function LoginForm() {
 
   const onSubmit = (values: LoginFormSchema) => {
     loginMutation.mutate(values);
-    console.log(values);
   };
 
   return (
