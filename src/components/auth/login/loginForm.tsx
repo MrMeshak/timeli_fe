@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { login, LoginPayload } from '@/services/authService';
+import { login } from '@/services/authService';
 import { AxiosError } from 'axios';
 
 const loginFormSchema = z.object({
@@ -29,7 +29,7 @@ export default function LoginForm() {
   const navigate = useNavigate({ from: '/auth/login' });
 
   const loginMutation = useMutation({
-    mutationFn: async (payload: LoginPayload) => await login(payload),
+    mutationFn: login,
     onSuccess: () => navigate({ to: '/' }),
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -105,7 +105,7 @@ export default function LoginForm() {
           )}
         />
 
-        <div className="mt-4 flex flex-col gap-2">
+        <div className="mt-4 flex flex-col gap-4">
           <Button>Login</Button>
           {errors.root && (
             <Alert className="bg-zinc-100 dark:bg-zinc-800">

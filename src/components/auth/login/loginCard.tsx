@@ -20,10 +20,10 @@ export default function LoginCard() {
         <LoginForm />
       </CardContent>
       <CardFooter>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="text-muted-foreground text-sm">
           Don't have an account?{' '}
           <Link
-            className="font-semibold text-black hover:underline dark:text-white"
+            className="text-primary font-semibold hover:underline"
             to="/auth/signup"
           >
             Signup
