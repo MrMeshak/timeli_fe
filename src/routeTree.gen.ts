@@ -12,7 +12,11 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as AuthSignupSuccessImport } from './routes/auth/signupSuccess'
 import { Route as AuthSignupImport } from './routes/auth/signup'
+import { Route as AuthPasswordResetSuccessImport } from './routes/auth/passwordResetSuccess'
+import { Route as AuthPasswordResetImport } from './routes/auth/passwordReset'
+import { Route as AuthPasswordForgotSuccessImport } from './routes/auth/passwordForgotSuccess'
 import { Route as AuthPasswordForgotImport } from './routes/auth/passwordForgot'
 import { Route as AuthLoginImport } from './routes/auth/login'
 
@@ -24,9 +28,33 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthSignupSuccessRoute = AuthSignupSuccessImport.update({
+  id: '/auth/signupSuccess',
+  path: '/auth/signupSuccess',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AuthSignupRoute = AuthSignupImport.update({
   id: '/auth/signup',
   path: '/auth/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthPasswordResetSuccessRoute = AuthPasswordResetSuccessImport.update({
+  id: '/auth/passwordResetSuccess',
+  path: '/auth/passwordResetSuccess',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthPasswordResetRoute = AuthPasswordResetImport.update({
+  id: '/auth/passwordReset',
+  path: '/auth/passwordReset',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthPasswordForgotSuccessRoute = AuthPasswordForgotSuccessImport.update({
+  id: '/auth/passwordForgotSuccess',
+  path: '/auth/passwordForgotSuccess',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,11 +95,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthPasswordForgotImport
       parentRoute: typeof rootRoute
     }
+    '/auth/passwordForgotSuccess': {
+      id: '/auth/passwordForgotSuccess'
+      path: '/auth/passwordForgotSuccess'
+      fullPath: '/auth/passwordForgotSuccess'
+      preLoaderRoute: typeof AuthPasswordForgotSuccessImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/passwordReset': {
+      id: '/auth/passwordReset'
+      path: '/auth/passwordReset'
+      fullPath: '/auth/passwordReset'
+      preLoaderRoute: typeof AuthPasswordResetImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/passwordResetSuccess': {
+      id: '/auth/passwordResetSuccess'
+      path: '/auth/passwordResetSuccess'
+      fullPath: '/auth/passwordResetSuccess'
+      preLoaderRoute: typeof AuthPasswordResetSuccessImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/signup': {
       id: '/auth/signup'
       path: '/auth/signup'
       fullPath: '/auth/signup'
       preLoaderRoute: typeof AuthSignupImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/signupSuccess': {
+      id: '/auth/signupSuccess'
+      path: '/auth/signupSuccess'
+      fullPath: '/auth/signupSuccess'
+      preLoaderRoute: typeof AuthSignupSuccessImport
       parentRoute: typeof rootRoute
     }
   }
@@ -83,14 +139,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/passwordForgot': typeof AuthPasswordForgotRoute
+  '/auth/passwordForgotSuccess': typeof AuthPasswordForgotSuccessRoute
+  '/auth/passwordReset': typeof AuthPasswordResetRoute
+  '/auth/passwordResetSuccess': typeof AuthPasswordResetSuccessRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/signupSuccess': typeof AuthSignupSuccessRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/passwordForgot': typeof AuthPasswordForgotRoute
+  '/auth/passwordForgotSuccess': typeof AuthPasswordForgotSuccessRoute
+  '/auth/passwordReset': typeof AuthPasswordResetRoute
+  '/auth/passwordResetSuccess': typeof AuthPasswordResetSuccessRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/signupSuccess': typeof AuthSignupSuccessRoute
 }
 
 export interface FileRoutesById {
@@ -98,15 +162,44 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/passwordForgot': typeof AuthPasswordForgotRoute
+  '/auth/passwordForgotSuccess': typeof AuthPasswordForgotSuccessRoute
+  '/auth/passwordReset': typeof AuthPasswordResetRoute
+  '/auth/passwordResetSuccess': typeof AuthPasswordResetSuccessRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/signupSuccess': typeof AuthSignupSuccessRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth/login' | '/auth/passwordForgot' | '/auth/signup'
+  fullPaths:
+    | '/'
+    | '/auth/login'
+    | '/auth/passwordForgot'
+    | '/auth/passwordForgotSuccess'
+    | '/auth/passwordReset'
+    | '/auth/passwordResetSuccess'
+    | '/auth/signup'
+    | '/auth/signupSuccess'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/login' | '/auth/passwordForgot' | '/auth/signup'
-  id: '__root__' | '/' | '/auth/login' | '/auth/passwordForgot' | '/auth/signup'
+  to:
+    | '/'
+    | '/auth/login'
+    | '/auth/passwordForgot'
+    | '/auth/passwordForgotSuccess'
+    | '/auth/passwordReset'
+    | '/auth/passwordResetSuccess'
+    | '/auth/signup'
+    | '/auth/signupSuccess'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth/login'
+    | '/auth/passwordForgot'
+    | '/auth/passwordForgotSuccess'
+    | '/auth/passwordReset'
+    | '/auth/passwordResetSuccess'
+    | '/auth/signup'
+    | '/auth/signupSuccess'
   fileRoutesById: FileRoutesById
 }
 
@@ -114,14 +207,22 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthPasswordForgotRoute: typeof AuthPasswordForgotRoute
+  AuthPasswordForgotSuccessRoute: typeof AuthPasswordForgotSuccessRoute
+  AuthPasswordResetRoute: typeof AuthPasswordResetRoute
+  AuthPasswordResetSuccessRoute: typeof AuthPasswordResetSuccessRoute
   AuthSignupRoute: typeof AuthSignupRoute
+  AuthSignupSuccessRoute: typeof AuthSignupSuccessRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthPasswordForgotRoute: AuthPasswordForgotRoute,
+  AuthPasswordForgotSuccessRoute: AuthPasswordForgotSuccessRoute,
+  AuthPasswordResetRoute: AuthPasswordResetRoute,
+  AuthPasswordResetSuccessRoute: AuthPasswordResetSuccessRoute,
   AuthSignupRoute: AuthSignupRoute,
+  AuthSignupSuccessRoute: AuthSignupSuccessRoute,
 }
 
 export const routeTree = rootRoute
@@ -137,7 +238,11 @@ export const routeTree = rootRoute
         "/",
         "/auth/login",
         "/auth/passwordForgot",
-        "/auth/signup"
+        "/auth/passwordForgotSuccess",
+        "/auth/passwordReset",
+        "/auth/passwordResetSuccess",
+        "/auth/signup",
+        "/auth/signupSuccess"
       ]
     },
     "/": {
@@ -149,8 +254,20 @@ export const routeTree = rootRoute
     "/auth/passwordForgot": {
       "filePath": "auth/passwordForgot.tsx"
     },
+    "/auth/passwordForgotSuccess": {
+      "filePath": "auth/passwordForgotSuccess.tsx"
+    },
+    "/auth/passwordReset": {
+      "filePath": "auth/passwordReset.tsx"
+    },
+    "/auth/passwordResetSuccess": {
+      "filePath": "auth/passwordResetSuccess.tsx"
+    },
     "/auth/signup": {
       "filePath": "auth/signup.tsx"
+    },
+    "/auth/signupSuccess": {
+      "filePath": "auth/signupSuccess.tsx"
     }
   }
 }
