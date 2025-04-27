@@ -17,7 +17,7 @@ export type SignupPayload = {
 };
 
 export async function signup(payload: SignupPayload) {
-  return await httpClient.post('api/auth/signup', payload);
+  return (await httpClient.post('api/auth/signup', payload)).data;
 }
 
 export type PasswordForgotPayload = {
@@ -26,4 +26,13 @@ export type PasswordForgotPayload = {
 
 export async function passwordForgot(payload: PasswordForgotPayload) {
   return (await httpClient.post('api/auth/passwordForgot', payload)).data;
+}
+
+export type PasswordResetPayload = {
+  token: string;
+  password: string;
+};
+
+export async function passwordReset(payload: PasswordResetPayload) {
+  return (await httpClient.post('api/auth/passwordReset', payload)).data;
 }

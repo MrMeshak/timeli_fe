@@ -13,6 +13,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useMutation } from '@tanstack/react-query';
+import { passwordReset } from '@/services/authService';
+import { AxiosError } from 'axios';
+import { useNavigate } from '@tanstack/react-router';
+import { Route } from '@/routes/auth/passwordReset';
 
 const passwordResetFormSchema = z
   .object({
@@ -20,6 +25,7 @@ const passwordResetFormSchema = z
       .string()
       .min(1, 'Required')
       .min(8, 'At least 8 characters')
+      .max(127)
       .refine(
         (password) => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W])/.test(password),
         (password) => {
@@ -39,7 +45,7 @@ const passwordResetFormSchema = z
           return { message: strArr.join('') };
         },
       ),
-    passwordConfirm: z.string().min(1, 'Required'),
+    passwordConfirm: z.string().min(1, 'Required').max(127),
   })
   .refine((fields) => fields.password === fields.passwordConfirm, {
     path: ['passwordConfirm'],
@@ -49,6 +55,25 @@ const passwordResetFormSchema = z
 type PasswordResetFormSchema = z.infer<typeof passwordResetFormSchema>;
 
 export default function PasswordResetForm() {
+  const navigate = useNavigate();
+  const token = Route.useLoaderData();
+  const passwordResetMutation = useMutation({
+    mutationFn: passwordReset,
+    onSuccess: () => navigate({ to: '/auth/passwordResetSuccess' }),
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 400) {
+          setError('root', {
+            type: error.response.data.error,
+            message: error.response.data.message,
+          });
+          return;
+        }
+      }
+      setError('root', { message: 'Oops, something went wrong' });
+    },
+  });
+
   const form = useForm({
     resolver: zodResolver(passwordResetFormSchema),
     defaultValues: {
@@ -64,6 +89,7 @@ export default function PasswordResetForm() {
 
   const onSubmit = (values: PasswordResetFormSchema) => {
     console.log(values);
+    passwordResetMutation.mutate({ token: token, password: values.password });
   };
 
   return (
