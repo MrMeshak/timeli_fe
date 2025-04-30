@@ -108,8 +108,10 @@ export default function LoginForm() {
         <div className="mt-4 flex flex-col gap-4">
           <Button>Login</Button>
           {errors.root && (
-            <Alert className="bg-zinc-100 dark:bg-zinc-800">
-              <AlertDescription>{errors.root.message}</AlertDescription>
+            <Alert className="bg-tmaroon-muted border-tmaroon-border">
+              <AlertDescription className="text-tmaroon-muted-foreground">
+                {errors.root.message}
+              </AlertDescription>
             </Alert>
           )}
         </div>

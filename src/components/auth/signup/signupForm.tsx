@@ -148,8 +148,10 @@ export default function SignupForm() {
         <div className="mt-4 flex flex-col gap-4">
           <Button>Sign Up</Button>
           {errors.root && (
-            <Alert className="bg-muted">
-              <AlertDescription>{errors.root.message}</AlertDescription>
+            <Alert className="bg-tmaroon-muted border-tmaroon-border">
+              <AlertDescription className="text-tmaroon-muted-foreground">
+                {errors.root.message}
+              </AlertDescription>
             </Alert>
           )}
         </div>
