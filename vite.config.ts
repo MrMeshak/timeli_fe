@@ -18,6 +18,7 @@ export default defineConfig(({ command, mode }) => {
         '/api': {
           target: env.VITE_TIMELI_BE_URL,
           changeOrigin: true,
+          withCredentials: true,
         },
       },
     },

@@ -5,8 +5,12 @@ export type LoginPayload = {
   password: string;
 };
 
+export type LoginData = {
+  permissions: string;
+};
+
 export async function login(payload: LoginPayload) {
-  return (await httpClient.post('api/auth/login', payload)).data;
+  return (await httpClient.post<LoginData>('api/auth/login', payload)).data;
 }
 
 export type SignupPayload = {
@@ -35,4 +39,8 @@ export type PasswordResetPayload = {
 
 export async function passwordReset(payload: PasswordResetPayload) {
   return (await httpClient.post('api/auth/passwordReset', payload)).data;
+}
+
+export async function logout() {
+  return (await httpClient.post('api/auth/logout')).data;
 }

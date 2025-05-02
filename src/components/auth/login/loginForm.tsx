@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { login } from '@/services/authService';
 import { AxiosError } from 'axios';
+import { setPermissions } from '@/store/permissionsStore';
 
 const loginFormSchema = z.object({
   email: z.string().min(1, 'Required').email('Invalid email'),
@@ -30,7 +31,10 @@ export default function LoginForm() {
 
   const loginMutation = useMutation({
     mutationFn: login,
-    onSuccess: () => navigate({ to: '/' }),
+    onSuccess: (loginData) => {
+      setPermissions(loginData.permissions);
+      navigate({ to: '/' });
+    },
     onError: (error) => {
       if (error instanceof AxiosError) {
         if (error.response?.status === 403) {

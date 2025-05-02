@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SettingsImport } from './routes/settings'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthSignupSuccessImport } from './routes/auth/signupSuccess'
 import { Route as AuthSignupImport } from './routes/auth/signup'
@@ -21,6 +22,12 @@ import { Route as AuthPasswordForgotImport } from './routes/auth/passwordForgot'
 import { Route as AuthLoginImport } from './routes/auth/login'
 
 // Create/Update Routes
+
+const SettingsRoute = SettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -81,6 +88,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/login': {
       id: '/auth/login'
       path: '/auth/login'
@@ -137,6 +151,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/passwordForgot': typeof AuthPasswordForgotRoute
   '/auth/passwordForgotSuccess': typeof AuthPasswordForgotSuccessRoute
@@ -148,6 +163,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/passwordForgot': typeof AuthPasswordForgotRoute
   '/auth/passwordForgotSuccess': typeof AuthPasswordForgotSuccessRoute
@@ -160,6 +176,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/passwordForgot': typeof AuthPasswordForgotRoute
   '/auth/passwordForgotSuccess': typeof AuthPasswordForgotSuccessRoute
@@ -173,6 +190,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/settings'
     | '/auth/login'
     | '/auth/passwordForgot'
     | '/auth/passwordForgotSuccess'
@@ -183,6 +201,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/settings'
     | '/auth/login'
     | '/auth/passwordForgot'
     | '/auth/passwordForgotSuccess'
@@ -193,6 +212,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/settings'
     | '/auth/login'
     | '/auth/passwordForgot'
     | '/auth/passwordForgotSuccess'
@@ -205,6 +225,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SettingsRoute: typeof SettingsRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthPasswordForgotRoute: typeof AuthPasswordForgotRoute
   AuthPasswordForgotSuccessRoute: typeof AuthPasswordForgotSuccessRoute
@@ -216,6 +237,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SettingsRoute: SettingsRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthPasswordForgotRoute: AuthPasswordForgotRoute,
   AuthPasswordForgotSuccessRoute: AuthPasswordForgotSuccessRoute,
@@ -236,6 +258,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/settings",
         "/auth/login",
         "/auth/passwordForgot",
         "/auth/passwordForgotSuccess",
@@ -247,6 +270,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/settings": {
+      "filePath": "settings.tsx"
     },
     "/auth/login": {
       "filePath": "auth/login.tsx"

@@ -1,3 +1,4 @@
+import { Navbar } from '@/components/nav/navbar';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
@@ -5,5 +6,9 @@ export const Route = createFileRoute('/')({
 });
 
 function HomePage() {
-  return <div className="m-3 p-5 font-bold">Hello Worl!</div>;
+  return (
+    <div>
+      <Navbar />
+    </div>
+  );
 }

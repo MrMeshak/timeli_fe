@@ -1,3 +1,4 @@
+import { removePermissions } from '@/store/permissionsStore';
 import axios from 'axios';
 
 export const httpClient = axios.create({
@@ -8,3 +9,15 @@ export const httpClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+httpClient.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    if (error.response.status === 404 || error.response.status === 401) {
+      removePermissions();
+      window.location.href = '/';
+      return Promise.reject(error);
+    }
+    return Promise.reject(error);
+  },
+);

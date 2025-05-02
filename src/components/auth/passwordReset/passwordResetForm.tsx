@@ -59,7 +59,8 @@ export default function PasswordResetForm() {
   const token = Route.useLoaderData();
   const passwordResetMutation = useMutation({
     mutationFn: passwordReset,
-    onSuccess: () => navigate({ to: '/auth/passwordResetSuccess' }),
+    onSuccess: () =>
+      navigate({ to: '/auth/passwordResetSuccess' }, { preload: 'none' }),
     onError: (error) => {
       if (error instanceof AxiosError) {
         if (error.response?.status === 400) {
@@ -88,7 +89,6 @@ export default function PasswordResetForm() {
   } = form;
 
   const onSubmit = (values: PasswordResetFormSchema) => {
-    console.log(values);
     passwordResetMutation.mutate({ token: token, password: values.password });
   };
 
@@ -128,8 +128,10 @@ export default function PasswordResetForm() {
         <div className="mt-4 flex flex-col gap-4">
           <Button>Reset</Button>
           {errors.root && (
-            <Alert className="bg-muted">
-              <AlertDescription>{errors.root.message}</AlertDescription>
+            <Alert className="bg-tmaroon-muted border-tmaroon-border">
+              <AlertDescription className="text-tmaroon-muted-foreground">
+                {errors.root.message}
+              </AlertDescription>
             </Alert>
           )}
         </div>
