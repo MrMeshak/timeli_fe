@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router';
 import { HandMetal } from 'lucide-react';
-import { UserNav } from './userNav';
 import ThemeToggle from './themeToggle';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { Button } from '../ui/button';
+import { UserNavWithData } from './userNavWithData';
 
 export function Navbar() {
   const { isAuthenticated } = useAuthContext();
@@ -19,7 +19,7 @@ export function Navbar() {
         <div className="flex flex-1 items-center justify-end space-x-4">
           <ThemeToggle />
           {isAuthenticated ? (
-            <UserNav />
+            <UserNavWithData />
           ) : (
             <Button asChild>
               <Link to="/auth/login">Login</Link>
