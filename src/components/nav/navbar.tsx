@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { HandMetal } from 'lucide-react';
 import ThemeToggle from './themeToggle';
-import { useAuthContext } from '../hooks/useAuthContext';
+import { useAuthContext } from '../../hooks/useAuthContext';
 import { Button } from '../ui/button';
 import { UserNavWithData } from './userNavWithData';
 

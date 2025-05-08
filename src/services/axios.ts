@@ -15,7 +15,7 @@ httpClient.interceptors.response.use(
   (error) => {
     if (error.response.status === 404 || error.response.status === 401) {
       removePermissions();
-      window.location.href = '/';
+      window.location.href = '/auth/login';
       return Promise.reject(error);
     }
     return Promise.reject(error);

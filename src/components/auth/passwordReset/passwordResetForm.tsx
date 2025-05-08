@@ -60,7 +60,7 @@ export default function PasswordResetForm() {
   const passwordResetMutation = useMutation({
     mutationFn: passwordReset,
     onSuccess: () =>
-      navigate({ to: '/auth/passwordResetSuccess' }, { preload: 'none' }),
+      navigate({ to: '/auth/passwordResetSuccess'})
     onError: (error) => {
       if (error instanceof AxiosError) {
         if (error.response?.status === 400) {
