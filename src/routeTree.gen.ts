@@ -8,10 +8,13 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as SettingsLayoutImport } from './routes/settings/_layout'
 import { Route as AuthSignupSuccessImport } from './routes/auth/signupSuccess'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthPasswordResetSuccessImport } from './routes/auth/passwordResetSuccess'
@@ -19,19 +22,32 @@ import { Route as AuthPasswordResetImport } from './routes/auth/passwordReset'
 import { Route as AuthPasswordForgotSuccessImport } from './routes/auth/passwordForgotSuccess'
 import { Route as AuthPasswordForgotImport } from './routes/auth/passwordForgot'
 import { Route as AuthLoginImport } from './routes/auth/login'
-import { Route as settingsSettingsImport } from './routes/(settings)/settings'
-import { Route as homeHomeImport } from './routes/(home)/home'
-import { Route as bookingBookingImport } from './routes/(booking)/booking'
-import { Route as settingsSettingsIndexImport } from './routes/(settings)/settings.index'
-import { Route as homeHomeIndexImport } from './routes/(home)/home.index'
-import { Route as bookingBookingRoomTypeDateImport } from './routes/(booking)/booking.$roomType.$date'
+import { Route as SettingsLayoutIndexImport } from './routes/settings/_layout.index'
+import { Route as BookingRoomTypeDateLayoutImport } from './routes/booking/$roomType.$date._layout'
+import { Route as BookingRoomTypeDateLayoutIndexImport } from './routes/booking/$roomType.$date._layout.index'
+
+// Create Virtual Routes
+
+const SettingsImport = createFileRoute('/settings')()
+const BookingRoomTypeDateImport = createFileRoute('/booking/$roomType/$date')()
 
 // Create/Update Routes
+
+const SettingsRoute = SettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const SettingsLayoutRoute = SettingsLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => SettingsRoute,
 } as any)
 
 const AuthSignupSuccessRoute = AuthSignupSuccessImport.update({
@@ -76,43 +92,29 @@ const AuthLoginRoute = AuthLoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const settingsSettingsRoute = settingsSettingsImport.update({
-  id: '/(settings)/settings',
-  path: '/settings',
+const BookingRoomTypeDateRoute = BookingRoomTypeDateImport.update({
+  id: '/booking/$roomType/$date',
+  path: '/booking/$roomType/$date',
   getParentRoute: () => rootRoute,
 } as any)
 
-const homeHomeRoute = homeHomeImport.update({
-  id: '/(home)/home',
-  path: '/home',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const bookingBookingRoute = bookingBookingImport.update({
-  id: '/(booking)/booking',
-  path: '/booking',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const settingsSettingsIndexRoute = settingsSettingsIndexImport.update({
+const SettingsLayoutIndexRoute = SettingsLayoutIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => settingsSettingsRoute,
+  getParentRoute: () => SettingsLayoutRoute,
 } as any)
 
-const homeHomeIndexRoute = homeHomeIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => homeHomeRoute,
+const BookingRoomTypeDateLayoutRoute = BookingRoomTypeDateLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => BookingRoomTypeDateRoute,
 } as any)
 
-const bookingBookingRoomTypeDateRoute = bookingBookingRoomTypeDateImport.update(
-  {
-    id: '/$roomType/$date',
-    path: '/$roomType/$date',
-    getParentRoute: () => bookingBookingRoute,
-  } as any,
-)
+const BookingRoomTypeDateLayoutIndexRoute =
+  BookingRoomTypeDateLayoutIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => BookingRoomTypeDateLayoutRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -123,27 +125,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/(booking)/booking': {
-      id: '/(booking)/booking'
-      path: '/booking'
-      fullPath: '/booking'
-      preLoaderRoute: typeof bookingBookingImport
-      parentRoute: typeof rootRoute
-    }
-    '/(home)/home': {
-      id: '/(home)/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof homeHomeImport
-      parentRoute: typeof rootRoute
-    }
-    '/(settings)/settings': {
-      id: '/(settings)/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof settingsSettingsImport
       parentRoute: typeof rootRoute
     }
     '/auth/login': {
@@ -195,72 +176,104 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupSuccessImport
       parentRoute: typeof rootRoute
     }
-    '/(home)/home/': {
-      id: '/(home)/home/'
-      path: '/'
-      fullPath: '/home/'
-      preLoaderRoute: typeof homeHomeIndexImport
-      parentRoute: typeof homeHomeImport
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsImport
+      parentRoute: typeof rootRoute
     }
-    '/(settings)/settings/': {
-      id: '/(settings)/settings/'
+    '/settings/_layout': {
+      id: '/settings/_layout'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsLayoutImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/_layout/': {
+      id: '/settings/_layout/'
       path: '/'
       fullPath: '/settings/'
-      preLoaderRoute: typeof settingsSettingsIndexImport
-      parentRoute: typeof settingsSettingsImport
+      preLoaderRoute: typeof SettingsLayoutIndexImport
+      parentRoute: typeof SettingsLayoutImport
     }
-    '/(booking)/booking/$roomType/$date': {
-      id: '/(booking)/booking/$roomType/$date'
-      path: '/$roomType/$date'
+    '/booking/$roomType/$date': {
+      id: '/booking/$roomType/$date'
+      path: '/booking/$roomType/$date'
       fullPath: '/booking/$roomType/$date'
-      preLoaderRoute: typeof bookingBookingRoomTypeDateImport
-      parentRoute: typeof bookingBookingImport
+      preLoaderRoute: typeof BookingRoomTypeDateImport
+      parentRoute: typeof rootRoute
+    }
+    '/booking/$roomType/$date/_layout': {
+      id: '/booking/$roomType/$date/_layout'
+      path: '/booking/$roomType/$date'
+      fullPath: '/booking/$roomType/$date'
+      preLoaderRoute: typeof BookingRoomTypeDateLayoutImport
+      parentRoute: typeof BookingRoomTypeDateRoute
+    }
+    '/booking/$roomType/$date/_layout/': {
+      id: '/booking/$roomType/$date/_layout/'
+      path: '/'
+      fullPath: '/booking/$roomType/$date/'
+      preLoaderRoute: typeof BookingRoomTypeDateLayoutIndexImport
+      parentRoute: typeof BookingRoomTypeDateLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface bookingBookingRouteChildren {
-  bookingBookingRoomTypeDateRoute: typeof bookingBookingRoomTypeDateRoute
+interface SettingsLayoutRouteChildren {
+  SettingsLayoutIndexRoute: typeof SettingsLayoutIndexRoute
 }
 
-const bookingBookingRouteChildren: bookingBookingRouteChildren = {
-  bookingBookingRoomTypeDateRoute: bookingBookingRoomTypeDateRoute,
+const SettingsLayoutRouteChildren: SettingsLayoutRouteChildren = {
+  SettingsLayoutIndexRoute: SettingsLayoutIndexRoute,
 }
 
-const bookingBookingRouteWithChildren = bookingBookingRoute._addFileChildren(
-  bookingBookingRouteChildren,
+const SettingsLayoutRouteWithChildren = SettingsLayoutRoute._addFileChildren(
+  SettingsLayoutRouteChildren,
 )
 
-interface homeHomeRouteChildren {
-  homeHomeIndexRoute: typeof homeHomeIndexRoute
+interface SettingsRouteChildren {
+  SettingsLayoutRoute: typeof SettingsLayoutRouteWithChildren
 }
 
-const homeHomeRouteChildren: homeHomeRouteChildren = {
-  homeHomeIndexRoute: homeHomeIndexRoute,
+const SettingsRouteChildren: SettingsRouteChildren = {
+  SettingsLayoutRoute: SettingsLayoutRouteWithChildren,
 }
 
-const homeHomeRouteWithChildren = homeHomeRoute._addFileChildren(
-  homeHomeRouteChildren,
+const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
+  SettingsRouteChildren,
 )
 
-interface settingsSettingsRouteChildren {
-  settingsSettingsIndexRoute: typeof settingsSettingsIndexRoute
+interface BookingRoomTypeDateLayoutRouteChildren {
+  BookingRoomTypeDateLayoutIndexRoute: typeof BookingRoomTypeDateLayoutIndexRoute
 }
 
-const settingsSettingsRouteChildren: settingsSettingsRouteChildren = {
-  settingsSettingsIndexRoute: settingsSettingsIndexRoute,
+const BookingRoomTypeDateLayoutRouteChildren: BookingRoomTypeDateLayoutRouteChildren =
+  {
+    BookingRoomTypeDateLayoutIndexRoute: BookingRoomTypeDateLayoutIndexRoute,
+  }
+
+const BookingRoomTypeDateLayoutRouteWithChildren =
+  BookingRoomTypeDateLayoutRoute._addFileChildren(
+    BookingRoomTypeDateLayoutRouteChildren,
+  )
+
+interface BookingRoomTypeDateRouteChildren {
+  BookingRoomTypeDateLayoutRoute: typeof BookingRoomTypeDateLayoutRouteWithChildren
 }
 
-const settingsSettingsRouteWithChildren =
-  settingsSettingsRoute._addFileChildren(settingsSettingsRouteChildren)
+const BookingRoomTypeDateRouteChildren: BookingRoomTypeDateRouteChildren = {
+  BookingRoomTypeDateLayoutRoute: BookingRoomTypeDateLayoutRouteWithChildren,
+}
+
+const BookingRoomTypeDateRouteWithChildren =
+  BookingRoomTypeDateRoute._addFileChildren(BookingRoomTypeDateRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/booking': typeof bookingBookingRouteWithChildren
-  '/home': typeof homeHomeRouteWithChildren
-  '/settings': typeof settingsSettingsRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/passwordForgot': typeof AuthPasswordForgotRoute
   '/auth/passwordForgotSuccess': typeof AuthPasswordForgotSuccessRoute
@@ -268,14 +281,14 @@ export interface FileRoutesByFullPath {
   '/auth/passwordResetSuccess': typeof AuthPasswordResetSuccessRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/signupSuccess': typeof AuthSignupSuccessRoute
-  '/home/': typeof homeHomeIndexRoute
-  '/settings/': typeof settingsSettingsIndexRoute
-  '/booking/$roomType/$date': typeof bookingBookingRoomTypeDateRoute
+  '/settings': typeof SettingsLayoutRouteWithChildren
+  '/settings/': typeof SettingsLayoutIndexRoute
+  '/booking/$roomType/$date': typeof BookingRoomTypeDateLayoutRouteWithChildren
+  '/booking/$roomType/$date/': typeof BookingRoomTypeDateLayoutIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/booking': typeof bookingBookingRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/passwordForgot': typeof AuthPasswordForgotRoute
   '/auth/passwordForgotSuccess': typeof AuthPasswordForgotSuccessRoute
@@ -283,17 +296,13 @@ export interface FileRoutesByTo {
   '/auth/passwordResetSuccess': typeof AuthPasswordResetSuccessRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/signupSuccess': typeof AuthSignupSuccessRoute
-  '/home': typeof homeHomeIndexRoute
-  '/settings': typeof settingsSettingsIndexRoute
-  '/booking/$roomType/$date': typeof bookingBookingRoomTypeDateRoute
+  '/settings': typeof SettingsLayoutIndexRoute
+  '/booking/$roomType/$date': typeof BookingRoomTypeDateLayoutIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/(booking)/booking': typeof bookingBookingRouteWithChildren
-  '/(home)/home': typeof homeHomeRouteWithChildren
-  '/(settings)/settings': typeof settingsSettingsRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/passwordForgot': typeof AuthPasswordForgotRoute
   '/auth/passwordForgotSuccess': typeof AuthPasswordForgotSuccessRoute
@@ -301,18 +310,18 @@ export interface FileRoutesById {
   '/auth/passwordResetSuccess': typeof AuthPasswordResetSuccessRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/signupSuccess': typeof AuthSignupSuccessRoute
-  '/(home)/home/': typeof homeHomeIndexRoute
-  '/(settings)/settings/': typeof settingsSettingsIndexRoute
-  '/(booking)/booking/$roomType/$date': typeof bookingBookingRoomTypeDateRoute
+  '/settings': typeof SettingsRouteWithChildren
+  '/settings/_layout': typeof SettingsLayoutRouteWithChildren
+  '/settings/_layout/': typeof SettingsLayoutIndexRoute
+  '/booking/$roomType/$date': typeof BookingRoomTypeDateRouteWithChildren
+  '/booking/$roomType/$date/_layout': typeof BookingRoomTypeDateLayoutRouteWithChildren
+  '/booking/$roomType/$date/_layout/': typeof BookingRoomTypeDateLayoutIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/booking'
-    | '/home'
-    | '/settings'
     | '/auth/login'
     | '/auth/passwordForgot'
     | '/auth/passwordForgotSuccess'
@@ -320,13 +329,13 @@ export interface FileRouteTypes {
     | '/auth/passwordResetSuccess'
     | '/auth/signup'
     | '/auth/signupSuccess'
-    | '/home/'
+    | '/settings'
     | '/settings/'
     | '/booking/$roomType/$date'
+    | '/booking/$roomType/$date/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/booking'
     | '/auth/login'
     | '/auth/passwordForgot'
     | '/auth/passwordForgotSuccess'
@@ -334,15 +343,11 @@ export interface FileRouteTypes {
     | '/auth/passwordResetSuccess'
     | '/auth/signup'
     | '/auth/signupSuccess'
-    | '/home'
     | '/settings'
     | '/booking/$roomType/$date'
   id:
     | '__root__'
     | '/'
-    | '/(booking)/booking'
-    | '/(home)/home'
-    | '/(settings)/settings'
     | '/auth/login'
     | '/auth/passwordForgot'
     | '/auth/passwordForgotSuccess'
@@ -350,17 +355,17 @@ export interface FileRouteTypes {
     | '/auth/passwordResetSuccess'
     | '/auth/signup'
     | '/auth/signupSuccess'
-    | '/(home)/home/'
-    | '/(settings)/settings/'
-    | '/(booking)/booking/$roomType/$date'
+    | '/settings'
+    | '/settings/_layout'
+    | '/settings/_layout/'
+    | '/booking/$roomType/$date'
+    | '/booking/$roomType/$date/_layout'
+    | '/booking/$roomType/$date/_layout/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  bookingBookingRoute: typeof bookingBookingRouteWithChildren
-  homeHomeRoute: typeof homeHomeRouteWithChildren
-  settingsSettingsRoute: typeof settingsSettingsRouteWithChildren
   AuthLoginRoute: typeof AuthLoginRoute
   AuthPasswordForgotRoute: typeof AuthPasswordForgotRoute
   AuthPasswordForgotSuccessRoute: typeof AuthPasswordForgotSuccessRoute
@@ -368,13 +373,12 @@ export interface RootRouteChildren {
   AuthPasswordResetSuccessRoute: typeof AuthPasswordResetSuccessRoute
   AuthSignupRoute: typeof AuthSignupRoute
   AuthSignupSuccessRoute: typeof AuthSignupSuccessRoute
+  SettingsRoute: typeof SettingsRouteWithChildren
+  BookingRoomTypeDateRoute: typeof BookingRoomTypeDateRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  bookingBookingRoute: bookingBookingRouteWithChildren,
-  homeHomeRoute: homeHomeRouteWithChildren,
-  settingsSettingsRoute: settingsSettingsRouteWithChildren,
   AuthLoginRoute: AuthLoginRoute,
   AuthPasswordForgotRoute: AuthPasswordForgotRoute,
   AuthPasswordForgotSuccessRoute: AuthPasswordForgotSuccessRoute,
@@ -382,6 +386,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthPasswordResetSuccessRoute: AuthPasswordResetSuccessRoute,
   AuthSignupRoute: AuthSignupRoute,
   AuthSignupSuccessRoute: AuthSignupSuccessRoute,
+  SettingsRoute: SettingsRouteWithChildren,
+  BookingRoomTypeDateRoute: BookingRoomTypeDateRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -395,38 +401,19 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/(booking)/booking",
-        "/(home)/home",
-        "/(settings)/settings",
         "/auth/login",
         "/auth/passwordForgot",
         "/auth/passwordForgotSuccess",
         "/auth/passwordReset",
         "/auth/passwordResetSuccess",
         "/auth/signup",
-        "/auth/signupSuccess"
+        "/auth/signupSuccess",
+        "/settings",
+        "/booking/$roomType/$date"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/(booking)/booking": {
-      "filePath": "(booking)/booking.tsx",
-      "children": [
-        "/(booking)/booking/$roomType/$date"
-      ]
-    },
-    "/(home)/home": {
-      "filePath": "(home)/home.tsx",
-      "children": [
-        "/(home)/home/"
-      ]
-    },
-    "/(settings)/settings": {
-      "filePath": "(settings)/settings.tsx",
-      "children": [
-        "/(settings)/settings/"
-      ]
     },
     "/auth/login": {
       "filePath": "auth/login.tsx"
@@ -449,17 +436,39 @@ export const routeTree = rootRoute
     "/auth/signupSuccess": {
       "filePath": "auth/signupSuccess.tsx"
     },
-    "/(home)/home/": {
-      "filePath": "(home)/home.index.tsx",
-      "parent": "/(home)/home"
+    "/settings": {
+      "filePath": "settings",
+      "children": [
+        "/settings/_layout"
+      ]
     },
-    "/(settings)/settings/": {
-      "filePath": "(settings)/settings.index.tsx",
-      "parent": "/(settings)/settings"
+    "/settings/_layout": {
+      "filePath": "settings/_layout.tsx",
+      "parent": "/settings",
+      "children": [
+        "/settings/_layout/"
+      ]
     },
-    "/(booking)/booking/$roomType/$date": {
-      "filePath": "(booking)/booking.$roomType.$date.tsx",
-      "parent": "/(booking)/booking"
+    "/settings/_layout/": {
+      "filePath": "settings/_layout.index.tsx",
+      "parent": "/settings/_layout"
+    },
+    "/booking/$roomType/$date": {
+      "filePath": "booking",
+      "children": [
+        "/booking/$roomType/$date/_layout"
+      ]
+    },
+    "/booking/$roomType/$date/_layout": {
+      "filePath": "booking/$roomType.$date._layout.tsx",
+      "parent": "/booking/$roomType/$date",
+      "children": [
+        "/booking/$roomType/$date/_layout/"
+      ]
+    },
+    "/booking/$roomType/$date/_layout/": {
+      "filePath": "booking/$roomType.$date._layout.index.tsx",
+      "parent": "/booking/$roomType/$date/_layout"
     }
   }
 }
