@@ -5,7 +5,8 @@ import { fetchBookingMatrixData } from '@/services/bookingService';
 export default function BookingMatrixWithData() {
   const bookingMatrixQuery = useQuery({
     queryKey: ['booking', 'matrix'],
-    queryFn: fetchBookingMatrixData,
+    queryFn: () =>
+      fetchBookingMatrixData({ roomTypeId: 'badminton', date: '2025-06-01' }),
   });
 
   if (bookingMatrixQuery.isLoading) {

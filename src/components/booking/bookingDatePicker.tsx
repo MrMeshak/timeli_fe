@@ -24,7 +24,7 @@ export default function BookingDatePicker() {
         <Button
           variant="outline"
           className={cn(
-            'bg-background dark:bg-background w-[280px] justify-start text-left font-normal',
+            'bg-background dark:bg-background w-55 justify-start text-left font-normal md:w-70',
             !date && 'text-muted-forground',
           )}
         >
