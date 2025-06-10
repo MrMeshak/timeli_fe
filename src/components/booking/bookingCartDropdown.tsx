@@ -1,0 +1,25 @@
+import { ShoppingBasket } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+} from '@/components/ui/dropdown-menu';
+
+import BookingCart from './BookingCart';
+
+export default function BookingCartDropdown() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className="md:w-20">
+          <ShoppingBasket />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="m-2 min-w-64 p-4">
+        <BookingCart />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
