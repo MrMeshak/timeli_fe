@@ -6,7 +6,14 @@ import BookingCartItem from '@/components/booking/bookingCartItem';
 export default function BookingCart() {
   return (
     <div>
+      <div className="text-border border-border mb-2 py-1 text-sm font-semibold">
+        June 1st, 2025
+      </div>
       <div className="flex w-full flex-col gap-4 pb-4">
+        <div className="font-semibold">Court 1 - C1</div>
+        <BookingCartItem />
+        <BookingCartItem />
+        <div className="font-semibold">Court 3 - C3</div>
         <BookingCartItem />
         <BookingCartItem />
       </div>
