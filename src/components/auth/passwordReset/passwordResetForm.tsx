@@ -17,7 +17,7 @@ import { useMutation } from '@tanstack/react-query';
 import { passwordReset } from '@/services/authService';
 import { AxiosError } from 'axios';
 import { useNavigate } from '@tanstack/react-router';
-import { Route } from '@/routes/auth/passwordReset';
+import { passwordResetRoute } from '@/routes/authRoutes';
 
 const passwordResetFormSchema = z
   .object({
@@ -56,7 +56,9 @@ type PasswordResetFormSchema = z.infer<typeof passwordResetFormSchema>;
 
 export default function PasswordResetForm() {
   const navigate = useNavigate();
-  const token = Route.useLoaderData();
+  const {
+    search: { token },
+  } = passwordResetRoute.useLoaderData();
   const passwordResetMutation = useMutation({
     mutationFn: passwordReset,
     onSuccess: () => navigate({ to: '/auth/passwordResetSuccess' }),

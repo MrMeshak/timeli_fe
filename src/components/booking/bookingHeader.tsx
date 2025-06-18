@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, ShoppingBasket } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../ui/button';
 import BookingDatePicker from './bookingDatePicker';
 import BookingCartDropdown from './bookingCartDropdown';

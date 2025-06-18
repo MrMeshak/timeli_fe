@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Route } from '@/routes/booking/$roomType.$date._layout.index';
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import {
@@ -11,10 +10,13 @@ import { Button } from '../ui/button';
 import { Calendar } from '../ui/calendar';
 import { useNavigate } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
+import { bookingMatrixRoute } from '@/routes/bookingRoutes';
 
 export default function BookingDatePicker() {
   const navigate = useNavigate();
-  const { roomType, date } = Route.useLoaderData();
+  const {
+    params: { roomTypeId, date },
+  } = bookingMatrixRoute.useLoaderData();
 
   const [calendarOpen, setCalendarOpen] = useState(false);
 
@@ -42,8 +44,8 @@ export default function BookingDatePicker() {
             if (!date) return;
             setCalendarOpen(false);
             navigate({
-              to: '/booking/$roomType/$date',
-              params: { roomType, date: format(date, `yyyy-MM-dd`) },
+              to: '/booking/matrix/$roomTypeId/$date',
+              params: { roomTypeId, date: format(date, `yyyy-MM-dd`) },
             });
           }}
           initialFocus

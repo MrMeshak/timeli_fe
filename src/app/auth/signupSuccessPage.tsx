@@ -1,13 +1,9 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 import SignupSuccessCard from '@/components/auth/signup/signupSuccessCard';
 
-export const Route = createFileRoute('/auth/signupSuccess')({
-  component: SignupSuccessPage,
-});
-
-function SignupSuccessPage() {
+export default function SignupSuccessPage() {
   const navigate = useNavigate();
 
   useEffect(() => {

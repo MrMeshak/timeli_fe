@@ -6,7 +6,6 @@ export default function BookingCartItem() {
     <div className="border-tgreen-muted border-l-6 pl-4">
       <div className="flex justify-between">
         <div>
-          {/* <h4 className="font-semibold">Court 1</h4> */}
           <p className="text-muted-foreground">16:00 - 16:30</p>
         </div>
         <Button variant="ghost" size="icon">

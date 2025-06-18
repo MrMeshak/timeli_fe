@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
 } from '@/components/ui/dropdown-menu';
 
-import BookingCart from './BookingCart';
+import BookingCart from './bookingCart';
 
 export default function BookingCartDropdown() {
   return (
@@ -17,7 +17,7 @@ export default function BookingCartDropdown() {
           <ShoppingBasket />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="m-2 min-w-64 p-4">
+      <DropdownMenuContent className="m-2 min-w-64">
         <BookingCart />
       </DropdownMenuContent>
     </DropdownMenu>

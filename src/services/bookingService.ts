@@ -1,5 +1,16 @@
 import { httpClient } from './axios';
 
+export interface BookingContextData {
+  roomTypes: {
+    id: string;
+    name: string;
+  }[];
+}
+
+export async function fetchBookingContextData(): Promise<BookingContextData> {
+  return (await httpClient.get<BookingContextData>(`api/booking/context`)).data;
+}
+
 export interface BookingMatrixPayload {
   roomTypeId: string;
   date: string;
@@ -18,6 +29,7 @@ export interface BookingMatrixData {
         status: BookingSlotStatus;
         price: number;
         startMin: number;
+        roomId: string;
       }[];
     }[];
   };

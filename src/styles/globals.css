@@ -172,6 +172,10 @@
   --color-tgold-muted-foreground: var(--tgold-muted-foreground);
   --color-tgold-border: var(--tgold-border);
 
+  --color-tgreen-muted: var(--tgreen-muted);
+  --color-tgreen-muted-forground: var(--tgreen-muted-foreground);
+  --color-tgreen-border: var(--tgreen-border);
+
   --color-tpurple-900: #1b0f2a;
   --color-tpurple-700: #291e3b;
   --color-tpurple-500: #3e3355;
