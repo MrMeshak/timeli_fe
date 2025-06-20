@@ -12,13 +12,13 @@ import AppLayout from '@/components/layout/appLayout';
 
 const bookingRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: 'booking',
+  path: 'booking/$roomTypeId/$date',
   component: AppLayout,
 });
 
 export const bookingMatrixRoute = createRoute({
   getParentRoute: () => bookingRoute,
-  path: 'matrix/$roomTypeId/$date',
+  path: '/',
   beforeLoad: async ({ context }) => {
     const { queryClient } = context;
     await queryClient.ensureQueryData({
@@ -47,7 +47,7 @@ export const bookingMatrixRoute = createRoute({
     const date = parse(dateStr, 'yyyy-MM-dd', new Date());
     if (!isValid(date)) {
       throw redirect({
-        to: '/booking/matrix/$roomTypeId/$date',
+        to: '/booking/$roomTypeId/$date/matrix',
         params: { roomTypeId, date: format(Date.now(), 'yyyy-MM-dd') },
       });
     }
