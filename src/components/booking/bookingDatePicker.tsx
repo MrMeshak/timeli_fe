@@ -44,7 +44,7 @@ export default function BookingDatePicker() {
             if (!date) return;
             setCalendarOpen(false);
             navigate({
-              to: '/booking/matrix/$roomTypeId/$date',
+              to: '/booking/$roomTypeId/$date',
               params: { roomTypeId, date: format(date, `yyyy-MM-dd`) },
             });
           }}

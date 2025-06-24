@@ -28,7 +28,6 @@ export interface CartStoreState {
       >
     >
   >;
-
   roomDetailsMap: Map<string, RoomDetails>;
 
   actions: {
@@ -37,16 +36,13 @@ export interface CartStoreState {
       roomDetails: RoomDetails,
       cartItem: CartItem,
     ) => void;
-    removeCartItem: (
-      date: Date,
-      roomDetails: RoomDetails,
-      cartItem: CartItem,
-    ) => void;
+    removeCartItem: (date: Date, roomId: string, cartIndex: number) => void;
     toggleCartItem: (
       date: Date,
       roomDetails: RoomDetails,
       CartItem: CartItem,
     ) => void;
+    clearCart: () => void;
   };
 }
 
@@ -95,11 +91,7 @@ const useCartStore = create<CartStoreState>()(
             roomDetailsMap: roomDetailsMap,
           }));
         },
-        removeCartItem: (
-          date: Date,
-          roomDetails: RoomDetails,
-          cartItem: CartItem,
-        ) => {
+        removeCartItem: (date: Date, roomId: string, cartIndex: number) => {
           const cartMap = structuredClone(get().cartMap);
           const roomDetailsMap = structuredClone(get().roomDetailsMap);
 
@@ -108,14 +100,14 @@ const useCartStore = create<CartStoreState>()(
           const roomMap = cartMap.get(dateStr);
           if (!roomMap) return;
 
-          const cartItemMap = roomMap.get(roomDetails.id);
+          const cartItemMap = roomMap.get(roomId);
           if (!cartItemMap) return;
 
-          cartItemMap.delete(cartItem.index);
+          cartItemMap.delete(cartIndex);
 
           if (cartItemMap.size === 0) {
-            roomMap.delete(roomDetails.id);
-            roomDetailsMap.delete(roomDetails.id);
+            roomMap.delete(roomId);
+            roomDetailsMap.delete(roomId);
           }
           if (roomMap.size === 0) cartMap.delete(dateStr);
 
@@ -132,10 +124,16 @@ const useCartStore = create<CartStoreState>()(
           const { cartMap, actions } = get();
           const dateStr = format(date, 'yyyy-MM-dd');
           if (cartMap.get(dateStr)?.get(roomDetails.id)?.get(cartItem.index)) {
-            actions.removeCartItem(date, roomDetails, cartItem);
+            actions.removeCartItem(date, roomDetails.id, cartItem.index);
           } else {
             actions.addCartItem(date, roomDetails, cartItem);
           }
+        },
+        clearCart: () => {
+          set(() => ({
+            cartMap: new Map(),
+            roomDetailsMap: new Map(),
+          }));
         },
       },
     }),
