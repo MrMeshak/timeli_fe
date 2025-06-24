@@ -1,13 +1,23 @@
+import { useMemo } from 'react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import BookingCartList from '@/components/booking/bookingCartList';
+import { useBookingCartCartSource } from '@/store/cartStore';
+import { toBookingCartCartData } from '@/store/cartStoreHelpers';
 
 export default function BookingCart() {
+  const CartSource = useBookingCartCartSource();
+  const CartData = useMemo(
+    () => toBookingCartCartData(CartSource),
+    [CartSource],
+  );
+
   return (
     <div>
       <div>
-        <BookingCartList />
-        <BookingCartList />
+        {CartData.cartArr.map((x) => (
+          <BookingCartList data={x} />
+        ))}
       </div>
       <div className="bg-popover sticky bottom-0 w-full px-4 py-2">
         <Separator />

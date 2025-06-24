@@ -1,23 +1,23 @@
 import { create } from 'zustand';
-import {
-  persist,
-  PersistStorage,
-  StateStorage,
-  StorageValue,
-} from 'zustand/middleware';
+import { useShallow } from 'zustand/shallow';
+import { persist, PersistStorage, StorageValue } from 'zustand/middleware';
 import { BookingMatrixData } from '@/services/bookingService';
 import superjson from 'superjson';
-
-type CartItem =
-  BookingMatrixData['bookingMatrix']['rooms'][number]['slots'][number];
 import { format } from 'date-fns';
+import {
+  BookingCartCartSource,
+  BookingMatrixRoomCartSource,
+} from './cartStoreHelpers';
 
-type RoomDetails = Pick<
+export type CartItem =
+  BookingMatrixData['bookingMatrix']['rooms'][number]['slots'][number];
+
+export type RoomDetails = Pick<
   BookingMatrixData['bookingMatrix']['rooms'][number],
-  'id' | 'displayName' | 'name'
+  'id' | 'displayName' | 'name' | 'slotSize'
 >;
 
-interface CartStoreState {
+export interface CartStoreState {
   cartMap: Map<
     string, //date string
     Map<
@@ -41,6 +41,11 @@ interface CartStoreState {
       date: Date,
       roomDetails: RoomDetails,
       cartItem: CartItem,
+    ) => void;
+    toggleCartItem: (
+      date: Date,
+      roomDetails: RoomDetails,
+      CartItem: CartItem,
     ) => void;
   };
 }
@@ -69,31 +74,69 @@ const useCartStore = create<CartStoreState>()(
           roomDetails: RoomDetails,
           cartItem: CartItem,
         ) => {
-          const updatedCartMap = structuredClone(get().cartMap);
-          const updatedRoomDetailsMap = structuredClone(get().roomDetailsMap);
+          const cartMap = structuredClone(get().cartMap);
+          const roomDetailsMap = structuredClone(get().roomDetailsMap);
 
           const dateStr = format(date, 'yyyy-MM-dd');
 
           const roomMap =
-            updatedCartMap.get(dateStr) ||
-            updatedCartMap.set(dateStr, new Map()).get(dateStr)!;
+            cartMap.get(dateStr) ||
+            cartMap.set(dateStr, new Map()).get(dateStr)!;
           const cartItemMap =
             roomMap.get(roomDetails.id) ||
             roomMap.set(roomDetails.id, new Map()).get(roomDetails.id)!;
+
           cartItemMap.set(cartItem.index, cartItem);
 
-          updatedRoomDetailsMap.set(roomDetails.id, roomDetails);
+          roomDetailsMap.set(roomDetails.id, roomDetails);
 
           set(() => ({
-            cartMap: updatedCartMap,
-            roomDetailsMap: updatedRoomDetailsMap,
+            cartMap: cartMap,
+            roomDetailsMap: roomDetailsMap,
           }));
         },
         removeCartItem: (
-          _date: Date,
-          _roomDetails: RoomDetails,
-          _cartItem: CartItem,
-        ) => {},
+          date: Date,
+          roomDetails: RoomDetails,
+          cartItem: CartItem,
+        ) => {
+          const cartMap = structuredClone(get().cartMap);
+          const roomDetailsMap = structuredClone(get().roomDetailsMap);
+
+          const dateStr = format(date, 'yyyy-MM-dd');
+
+          const roomMap = cartMap.get(dateStr);
+          if (!roomMap) return;
+
+          const cartItemMap = roomMap.get(roomDetails.id);
+          if (!cartItemMap) return;
+
+          cartItemMap.delete(cartItem.index);
+
+          if (cartItemMap.size === 0) {
+            roomMap.delete(roomDetails.id);
+            roomDetailsMap.delete(roomDetails.id);
+          }
+          if (roomMap.size === 0) cartMap.delete(dateStr);
+
+          set(() => ({
+            cartMap,
+            roomDetailsMap,
+          }));
+        },
+        toggleCartItem: (
+          date: Date,
+          roomDetails: RoomDetails,
+          cartItem: CartItem,
+        ) => {
+          const { cartMap, actions } = get();
+          const dateStr = format(date, 'yyyy-MM-dd');
+          if (cartMap.get(dateStr)?.get(roomDetails.id)?.get(cartItem.index)) {
+            actions.removeCartItem(date, roomDetails, cartItem);
+          } else {
+            actions.addCartItem(date, roomDetails, cartItem);
+          }
+        },
       },
     }),
     {
@@ -107,15 +150,22 @@ const useCartStore = create<CartStoreState>()(
   ),
 );
 
-export const useCartData = () =>
+export const useCartActions = () =>
   useCartStore((state) => {
-    return Array.from(state.cartMap.entries())
-      .sort(([a], [b]) => new Date(b).getTime() - new Date(a).getTime())
-      .map(([dateStr, roomMap]) => [
-        dateStr,
-        Array.from(roomMap.entries()).map(([roomId, cartItemMap]) => [
-          roomId,
-          Array.from(cartItemMap.entries()).sort(([a], [b]) => a - b),
-        ]),
-      ]);
+    return state.actions;
   });
+
+export const useBookingCartCartSource = (): BookingCartCartSource =>
+  useCartStore(
+    useShallow((state) => ({
+      cartMap: state.cartMap,
+      roomDetailsMap: state.roomDetailsMap,
+    })),
+  );
+
+export const useBookingMatrixRoomCartSource = (): BookingMatrixRoomCartSource =>
+  useCartStore(
+    useShallow((state) => ({
+      cartMap: state.cartMap,
+    })),
+  );

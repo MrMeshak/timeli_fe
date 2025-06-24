@@ -11,7 +11,7 @@ import BookingCart from './bookingCart';
 
 export default function BookingCartDropdown() {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button className="md:w-20">
           <ShoppingBasket />

@@ -47,7 +47,7 @@ export const bookingMatrixRoute = createRoute({
     const date = parse(dateStr, 'yyyy-MM-dd', new Date());
     if (!isValid(date)) {
       throw redirect({
-        to: '/booking/$roomTypeId/$date/matrix',
+        to: '/booking/$roomTypeId/$date',
         params: { roomTypeId, date: format(Date.now(), 'yyyy-MM-dd') },
       });
     }
