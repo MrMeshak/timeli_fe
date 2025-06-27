@@ -29,6 +29,7 @@ export interface BookingMatrixData {
         status: BookingSlotStatus;
         price: number;
         startMin: number;
+        endMin: number;
         roomId: string;
       }[];
     }[];

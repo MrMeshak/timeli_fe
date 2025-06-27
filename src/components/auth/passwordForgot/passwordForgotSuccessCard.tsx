@@ -5,13 +5,13 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 
-export function PasswordResetSuccessCard() {
+export default function PasswordForgotSuccessCard() {
   return (
     <Card className="flex w-full max-w-[30rem]">
       <CardHeader>
         <CardTitle>Success!</CardTitle>
         <CardDescription>
-          Congratulations, your password has been successfully reset
+          An email has been sent to reset your password
         </CardDescription>
       </CardHeader>
     </Card>

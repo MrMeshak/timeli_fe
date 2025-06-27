@@ -1,5 +1,5 @@
 import z from 'zod';
-import { createRoute, notFound } from '@tanstack/react-router';
+import { createRoute, notFound, redirect } from '@tanstack/react-router';
 import { rootRoute } from '@/routes/routes';
 import LoginPage from '@/app/auth/loginPage';
 import SignupPage from '@/app/auth/signupPage';
@@ -8,10 +8,20 @@ import PasswordResetSuccessPage from '@/app/auth/passwordResetSuccessPage';
 import PasswordForgotPage from '@/app/auth/passwordForgotPage';
 import PasswordForgotSuccessPage from '@/app/auth/passwordForgotSucessPage';
 import SignupSuccessPage from '@/app/auth/signupSuccessPage';
+import AuthLayout from '@/components/layout/authLayout';
 
 const authRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'auth',
+  component: AuthLayout,
+});
+
+const authIndexRoute = createRoute({
+  getParentRoute: () => authRoute,
+  path: '/',
+  loader: () => {
+    throw redirect({ to: '/auth/login' });
+  },
 });
 
 const loginRoute = createRoute({
@@ -73,6 +83,7 @@ const passwordForgotSuccessRoute = createRoute({
 });
 
 export const authRouteTree = authRoute.addChildren([
+  authIndexRoute,
   loginRoute,
   signupRoute,
   signupSuccessRoute,
